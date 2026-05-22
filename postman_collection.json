@@ -1,0 +1,592 @@
+{
+  "info": {
+    "name": "Plazoleta Soft API Collection",
+    "_postman_id": "a1b2c3d4-5678-90ab-cdef-1234567890ab",
+    "description": "Collection of API endpoints for ms-auth, ms-restaurante, ms-pedidos, ms-trazabilidad, and ms-notificaciones grouped by role.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "msAuthUrl",
+      "value": "http://localhost:8083"
+    },
+    {
+      "key": "msRestauranteUrl",
+      "value": "http://localhost:8081"
+    },
+    {
+      "key": "msPedidosUrl",
+      "value": "http://localhost:8082"
+    },
+    {
+      "key": "msTrazabilidadUrl",
+      "value": "http://localhost:8084"
+    },
+    {
+      "key": "msNotificacionesUrl",
+      "value": "http://localhost:8085"
+    },
+    {
+      "key": "jwtToken",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth / Public",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"admin\",\n  \"correo\": \"admin@example.com\",\n  \"password\": \"secret\",\n  \"role\": \"ADMIN\"\n}"
+            },
+            "url": {
+              "raw": "{{msAuthUrl}}/auth/register",
+              "host": [
+                "{{msAuthUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"correo\": \"admin@example.com\",\n  \"password\": \"secret\"\n}"
+            },
+            "url": {
+              "raw": "{{msAuthUrl}}/auth/login",
+              "host": [
+                "{{msAuthUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          }
+        },
+        {
+          "name": "List Restaurantes",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{msRestauranteUrl}}/restaurantes",
+              "host": [
+                "{{msRestauranteUrl}}"
+              ],
+              "path": [
+                "restaurantes"
+              ]
+            }
+          }
+        },
+        {
+          "name": "List Platos by Restaurante",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{msRestauranteUrl}}/restaurantes/1/platos",
+              "host": [
+                "{{msRestauranteUrl}}"
+              ],
+              "path": [
+                "restaurantes",
+                "1",
+                "platos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "List Trazabilidad Eventos",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{msTrazabilidadUrl}}/api/trazabilidad/eventos",
+              "host": [
+                "{{msTrazabilidadUrl}}"
+              ],
+              "path": [
+                "api",
+                "trazabilidad",
+                "eventos"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ADMIN",
+      "item": [
+        {
+          "name": "Create Restaurante",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwtToken}}"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Restaurante Plaza\",\n  \"direccion\": \"Calle Principal 123\",\n  \"idPropietario\": 1\n}"
+            },
+            "url": {
+              "raw": "{{msRestauranteUrl}}/restaurantes",
+              "host": [
+                "{{msRestauranteUrl}}"
+              ],
+              "path": [
+                "restaurantes"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Propietario",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwtToken}}"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Propietario Plaza\",\n  \"correo\": \"propietario@example.com\",\n  \"password\": \"secret\",\n  \"role\": \"PROPIETARIO\"\n}"
+            },
+            "url": {
+              "raw": "{{msRestauranteUrl}}/propietarios",
+              "host": [
+                "{{msRestauranteUrl}}"
+              ],
+              "path": [
+                "propietarios"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "PROPIETARIO",
+      "item": [
+        {
+          "name": "Create Plato",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwtToken}}"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Ceviche\",\n  \"descripcion\": \"Fresco\",\n  \"precio\": 25.50\n}"
+            },
+            "url": {
+              "raw": "{{msRestauranteUrl}}/restaurantes/1/platos",
+              "host": [
+                "{{msRestauranteUrl}}"
+              ],
+              "path": [
+                "restaurantes",
+                "1",
+                "platos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Plato",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwtToken}}"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Ceviche Especial\",\n  \"descripcion\": \"Fresco con salsa\",\n  \"precio\": 28.00\n}"
+            },
+            "url": {
+              "raw": "{{msRestauranteUrl}}/restaurantes/1/platos/1",
+              "host": [
+                "{{msRestauranteUrl}}"
+              ],
+              "path": [
+                "restaurantes",
+                "1",
+                "platos",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Plato",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwtToken}}"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "url": {
+              "raw": "{{msRestauranteUrl}}/restaurantes/1/platos/1",
+              "host": [
+                "{{msRestauranteUrl}}"
+              ],
+              "path": [
+                "restaurantes",
+                "1",
+                "platos",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "CLIENTE",
+      "item": [
+        {
+          "name": "Create Pedido",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwtToken}}"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"restauranteId\": 1,\n  \"listaIdsPlatos\": [1, 2]\n}"
+            },
+            "url": {
+              "raw": "{{msPedidosUrl}}/pedidos",
+              "host": [
+                "{{msPedidosUrl}}"
+              ],
+              "path": [
+                "pedidos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Cancel Pedido",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwtToken}}"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "url": {
+              "raw": "{{msPedidosUrl}}/pedidos/{{pedidoId}}/cancelar",
+              "host": [
+                "{{msPedidosUrl}}"
+              ],
+              "path": [
+                "pedidos",
+                "{{pedidoId}}",
+                "cancelar"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Mis Pedidos",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwtToken}}"
+                }
+              ]
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{msPedidosUrl}}/pedidos/mis-pedidos",
+              "host": [
+                "{{msPedidosUrl}}"
+              ],
+              "path": [
+                "pedidos",
+                "mis-pedidos"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "EMPLEADO",
+      "item": [
+        {
+          "name": "Pedidos Pendientes",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwtToken}}"
+                }
+              ]
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{msPedidosUrl}}/pedidos/pendientes?restauranteId=1",
+              "host": [
+                "{{msPedidosUrl}}"
+              ],
+              "path": [
+                "pedidos",
+                "pendientes"
+              ],
+              "query": [
+                {
+                  "key": "restauranteId",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Asignar Pedido",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwtToken}}"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "url": {
+              "raw": "{{msPedidosUrl}}/pedidos/{{pedidoId}}/asignar",
+              "host": [
+                "{{msPedidosUrl}}"
+              ],
+              "path": [
+                "pedidos",
+                "{{pedidoId}}",
+                "asignar"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Marcar Listo",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwtToken}}"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "url": {
+              "raw": "{{msPedidosUrl}}/pedidos/{{pedidoId}}/listo",
+              "host": [
+                "{{msPedidosUrl}}"
+              ],
+              "path": [
+                "pedidos",
+                "{{pedidoId}}",
+                "listo"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Entregar Pedido",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwtToken}}"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pinSeguridad\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "{{msPedidosUrl}}/pedidos/{{pedidoId}}/entregar",
+              "host": [
+                "{{msPedidosUrl}}"
+              ],
+              "path": [
+                "pedidos",
+                "{{pedidoId}}",
+                "entregar"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Notificaciones / Tracking",
+      "item": [
+        {
+          "name": "Enviar SMS Mock",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{msNotificacionesUrl}}/api/notificaciones/sms?destino=%2B51987654321&mensaje=Pedido%20enviado",
+              "host": [
+                "{{msNotificacionesUrl}}"
+              ],
+              "path": [
+                "api",
+                "notificaciones",
+                "sms"
+              ],
+              "query": [
+                {
+                  "key": "destino",
+                  "value": "+51987654321"
+                },
+                {
+                  "key": "mensaje",
+                  "value": "Pedido enviado"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Enviar PIN Notification",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"telefonoCliente\": \"+51987654321\",\n  \"pin\": \"123456\",\n  \"pedidoId\": \"pedido-1\"\n}"
+            },
+            "url": {
+              "raw": "{{msNotificacionesUrl}}/notificaciones/enviar-pin",
+              "host": [
+                "{{msNotificacionesUrl}}"
+              ],
+              "path": [
+                "notificaciones",
+                "enviar-pin"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

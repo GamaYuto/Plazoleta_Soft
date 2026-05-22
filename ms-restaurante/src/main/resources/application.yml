@@ -1,0 +1,20 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://postgres-restaurante:5432/restaurante_db}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+jwt:
+  secret: secret-key-very-long-change-me-1234567890123456
+msauth:
+  url: http://ms-auth:8080
+  admin:
+    token: 
+springdoc:
+  api-docs:
+    path: /v3/api-docs

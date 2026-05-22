@@ -1,0 +1,29 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://postgres-pedidos:5432/pedidos_db}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  redis:
+    host: ${REDIS_HOST:redis}
+    port: ${REDIS_PORT:6379}
+  main:
+    allow-bean-definition-overriding: true
+  cloud:
+    discovery:
+      enabled: false
+jwt:
+  secret: secret-key-very-long-change-me-1234567890123456
+msauth:
+  url: http://ms-auth:8080
+msrestaurante:
+  url: http://ms-restaurante:8080
+mstrazabilidad:
+  url: http://ms-trazabilidad:8080
+msnotificaciones:
+  url: http://ms-notificaciones:8080
