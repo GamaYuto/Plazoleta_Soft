@@ -1,6 +1,6 @@
 package com.plazoleta.msnotificaciones.controller;
 
-import jakarta.validation.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

@@ -2,7 +2,7 @@ package com.plazoleta.msnotificaciones.controller;
 
 import com.plazoleta.msnotificaciones.dto.PinNotificationRequest;
 import com.plazoleta.msnotificaciones.service.NotificationService;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

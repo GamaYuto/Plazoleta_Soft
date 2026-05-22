@@ -9,7 +9,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import jakarta.servlet.FilterChain;
+import javax.servlet.FilterChain;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;

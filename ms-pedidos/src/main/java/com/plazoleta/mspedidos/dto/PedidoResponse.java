@@ -16,6 +16,8 @@ public class PedidoResponse {
     private Long idRestaurante;
     private PedidoEstado estado;
     private Instant fechaCreacion;
+    private Instant fechaPreparacion;
+    private Long empleadoId;
     private String pinSeguridad;
     private Set<Long> listaIdsPlatos;
 }

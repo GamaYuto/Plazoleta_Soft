@@ -6,7 +6,7 @@ import com.plazoleta.msauth.dto.RegisterRequest;
 import com.plazoleta.msauth.dto.UsuarioResponse;
 import com.plazoleta.msauth.security.UsuarioPrincipal;
 import com.plazoleta.msauth.service.AuthService;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;

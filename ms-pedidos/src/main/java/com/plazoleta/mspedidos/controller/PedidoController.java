@@ -5,7 +5,7 @@ import com.plazoleta.mspedidos.dto.EntregarPedidoRequest;
 import com.plazoleta.mspedidos.dto.PedidoResponse;
 import com.plazoleta.mspedidos.security.UsuarioPrincipal;
 import com.plazoleta.mspedidos.service.PedidoService;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -49,8 +49,9 @@ public class PedidoController {
 
     @PatchMapping("/{id}/asignar")
     @PreAuthorize("hasRole('EMPLEADO')")
-    public ResponseEntity<PedidoResponse> asignarPedido(@PathVariable UUID id) {
-        return ResponseEntity.ok(pedidoService.asignarPedido(id));
+    public ResponseEntity<PedidoResponse> asignarPedido(@PathVariable UUID id,
+                                                        @RequestParam Long empleadoId) {
+        return ResponseEntity.ok(pedidoService.asignarPedido(id, empleadoId));
     }
 
     @PatchMapping("/{id}/listo")

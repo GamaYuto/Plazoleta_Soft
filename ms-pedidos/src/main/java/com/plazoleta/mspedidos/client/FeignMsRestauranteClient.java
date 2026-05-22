@@ -11,7 +11,7 @@ import java.util.List;
 @FeignClient(name = "ms-restaurante", url = "${msrestaurante.url:}")
 public interface FeignMsRestauranteClient {
 
-    @GetMapping("/restaurantes/{id}")
+    @GetMapping("/internal/restaurantes/{id}")
     RestauranteDto getRestaurante(@PathVariable("id") Long id);
 
     @GetMapping("/restaurantes/{id}/platos")

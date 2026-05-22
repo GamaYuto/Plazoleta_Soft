@@ -2,7 +2,7 @@ package com.plazoleta.mstrazabilidad.controller;
 
 import com.plazoleta.mstrazabilidad.model.Evento;
 import com.plazoleta.mstrazabilidad.repository.EventoRepository;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

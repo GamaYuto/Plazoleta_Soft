@@ -124,16 +124,18 @@ public class PedidoService {
                 .collect(Collectors.toList());
     }
 
-    public PedidoResponse asignarPedido(UUID pedidoId) {
+    public PedidoResponse asignarPedido(UUID pedidoId, Long empleadoId) {
         Pedido pedido = obtenerPedido(pedidoId);
         if (pedido.getEstado() != PedidoEstado.PENDIENTE) {
             throw new IllegalStateException("Solo pedidos PENDIENTE pueden ser asignados");
         }
         pedido.setEstado(PedidoEstado.EN_PREPARACION);
-        pedidoRepository.save(pedido);
+        pedido.setEmpleadoId(empleadoId);
+        pedido.setFechaPreparacion(Instant.now());
+        Pedido saved = pedidoRepository.save(pedido);
         removerPedidoDeCola(pedidoId, pedido.getIdRestaurante());
-        trazabilidadService.enviarEventoCambioEstado(pedido.getId().toString(), pedido.getIdRestaurante(), pedido.getIdCliente(), pedido.getEstado().name(), "Pedido asignado a preparación");
-        return toResponse(pedido);
+        trazabilidadService.enviarEventoCambioEstado(saved.getId().toString(), saved.getIdRestaurante(), saved.getIdCliente(), saved.getEstado().name(), "Pedido asignado a preparación");
+        return toResponse(saved);
     }
 
     public PedidoResponse marcarListo(UUID pedidoId) {
@@ -219,6 +221,8 @@ public class PedidoService {
                 pedido.getIdRestaurante(),
                 pedido.getEstado(),
                 pedido.getFechaCreacion(),
+                pedido.getFechaPreparacion(),
+                pedido.getEmpleadoId(),
                 pedido.getPinSeguridad(),
                 idsPlatos
         );

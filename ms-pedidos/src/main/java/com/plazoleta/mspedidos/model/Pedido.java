@@ -1,10 +1,13 @@
 package com.plazoleta.mspedidos.model;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.time.Instant;
 import java.util.HashSet;
@@ -13,11 +16,15 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "pedidos")
-@Data
+@Getter
+@Setter
+@ToString(exclude = "platos")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class Pedido {
     @Id
+    @EqualsAndHashCode.Include
     private UUID id;
 
     @NotNull
@@ -32,6 +39,10 @@ public class Pedido {
 
     @NotNull
     private Instant fechaCreacion;
+
+    private Instant fechaPreparacion;
+
+    private Long empleadoId;
 
     private String pinSeguridad;
 

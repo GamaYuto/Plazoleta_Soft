@@ -6,7 +6,7 @@ import com.plazoleta.msrestaurante.model.Role;
 import com.plazoleta.msrestaurante.security.UsuarioPrincipal;
 import com.plazoleta.msrestaurante.service.EmpleadoService;
 import com.plazoleta.msrestaurante.service.RestauranteService;
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

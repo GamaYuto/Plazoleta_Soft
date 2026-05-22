@@ -28,15 +28,17 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/restaurantes", "/restaurantes/*/platos").permitAll()
-                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/propietarios").hasRole("ADMIN")
-                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/restaurantes").hasRole("ADMIN")
-                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/restaurantes/*/empleados").hasRole("PROPIETARIO")
-                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/restaurantes/*/platos").hasRole("PROPIETARIO")
-                        .requestMatchers(org.springframework.http.HttpMethod.PUT, "/restaurantes/*/platos/**").hasRole("PROPIETARIO")
-                        .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/restaurantes/*/platos/**").hasRole("PROPIETARIO")
+                .authorizeRequests(auth -> auth
+                        .antMatchers("/actuator/health", "/actuator/info").permitAll()
+                        .antMatchers("/restaurantes", "/restaurantes/*/platos").permitAll()
+                        .antMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                        .antMatchers("/internal/**").permitAll()
+                        .antMatchers(org.springframework.http.HttpMethod.POST, "/propietarios").hasRole("ADMIN")
+                        .antMatchers(org.springframework.http.HttpMethod.POST, "/restaurantes").hasRole("ADMIN")
+                        .antMatchers(org.springframework.http.HttpMethod.POST, "/restaurantes/*/empleados").hasRole("PROPIETARIO")
+                        .antMatchers(org.springframework.http.HttpMethod.POST, "/restaurantes/*/platos").hasRole("PROPIETARIO")
+                        .antMatchers(org.springframework.http.HttpMethod.PUT, "/restaurantes/*/platos/**").hasRole("PROPIETARIO")
+                        .antMatchers(org.springframework.http.HttpMethod.DELETE, "/restaurantes/*/platos/**").hasRole("PROPIETARIO")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

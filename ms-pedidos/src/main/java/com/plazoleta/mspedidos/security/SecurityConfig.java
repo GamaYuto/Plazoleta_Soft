@@ -28,13 +28,14 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/pedidos/pendientes").hasRole("EMPLEADO")
-                        .requestMatchers("/pedidos/*/asignar").hasRole("EMPLEADO")
-                        .requestMatchers("/pedidos/*/listo").hasRole("EMPLEADO")
-                        .requestMatchers("/pedidos/*/entregar").hasRole("EMPLEADO")
-                        .requestMatchers("/pedidos/mis-pedidos").hasRole("CLIENTE")
-                        .requestMatchers("/pedidos").hasRole("CLIENTE")
+                .authorizeRequests(auth -> auth
+                        .antMatchers("/actuator/health", "/actuator/info").permitAll()
+                        .antMatchers("/pedidos/pendientes").hasRole("EMPLEADO")
+                        .antMatchers("/pedidos/*/asignar").hasRole("EMPLEADO")
+                        .antMatchers("/pedidos/*/listo").hasRole("EMPLEADO")
+                        .antMatchers("/pedidos/*/entregar").hasRole("EMPLEADO")
+                        .antMatchers("/pedidos/mis-pedidos").hasRole("CLIENTE")
+                        .antMatchers("/pedidos").hasRole("CLIENTE")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

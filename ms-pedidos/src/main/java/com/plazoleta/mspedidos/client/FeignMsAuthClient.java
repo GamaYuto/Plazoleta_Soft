@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(name = "ms-auth", url = "${msauth.url:}")
 public interface FeignMsAuthClient {
 
-    @GetMapping("/auth/users/{id}")
+    @GetMapping("/internal/usuarios/{id}")
     UsuarioDto getUsuarioById(@PathVariable("id") Long id);
 }
