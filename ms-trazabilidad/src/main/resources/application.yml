@@ -13,3 +13,15 @@ spring:
   data:
     mongodb:
       uri: ${SPRING_DATA_MONGODB_URI:mongodb://mongo-trazabilidad:27017/trazabilidad_db}
+jwt:
+  secret: ${JWT_SECRET:secret-key-very-long-change-me-1234567890123456}
+
+springdoc:
+  api-docs:
+    path: /api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+  show-actuator: true
+  packages-to-scan: com.plazoleta

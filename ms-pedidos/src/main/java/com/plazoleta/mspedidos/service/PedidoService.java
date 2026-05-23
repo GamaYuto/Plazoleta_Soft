@@ -5,10 +5,12 @@ import com.plazoleta.mspedidos.client.FeignMsRestauranteClient;
 import com.plazoleta.mspedidos.client.MsNotificacionesClient;
 import com.plazoleta.mspedidos.dto.CreatePedidoRequest;
 import com.plazoleta.mspedidos.dto.EntregarPedidoRequest;
+import com.plazoleta.mspedidos.dto.NotificacionPinRequest;
 import com.plazoleta.mspedidos.dto.PedidoResponse;
 import com.plazoleta.mspedidos.dto.PlatoDto;
 import com.plazoleta.mspedidos.dto.RestauranteDto;
 import com.plazoleta.mspedidos.dto.UsuarioDto;
+import lombok.extern.slf4j.Slf4j;
 import com.plazoleta.mspedidos.model.Pedido;
 import com.plazoleta.mspedidos.model.PedidoEstado;
 import com.plazoleta.mspedidos.model.PedidoPlato;
@@ -21,6 +23,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class PedidoService {
 
@@ -144,23 +147,24 @@ public class PedidoService {
             throw new IllegalStateException("Solo pedidos EN_PREPARACION pueden marcarse como LISTO");
         }
         pedido.setEstado(PedidoEstado.LISTO);
+        pedido.setFechaListo(Instant.now());
         pedido.setPinSeguridad(generarPin());
         Pedido saved = pedidoRepository.save(pedido);
-        UsuarioDto cliente = msAuthClient.getUsuarioById(saved.getIdCliente());
-        enviarEventoNotificacionAsync(saved, cliente != null ? cliente.getCorreo() : null);
+        enviarPinNotificationAsync(saved);
         trazabilidadService.enviarEventoCambioEstado(saved.getId().toString(), saved.getIdRestaurante(), saved.getIdCliente(), saved.getEstado().name(), "Pedido listo para entrega");
         return toResponse(saved);
     }
 
-    public PedidoResponse entregarPedido(UUID pedidoId, EntregarPedidoRequest request) {
+    public PedidoResponse entregarPedido(UUID pedidoId, String pin) {
         Pedido pedido = obtenerPedido(pedidoId);
         if (pedido.getEstado() != PedidoEstado.LISTO) {
             throw new IllegalStateException("Solo pedidos LISTO pueden entregarse");
         }
-        if (!request.getPinSeguridad().equals(pedido.getPinSeguridad())) {
+        if (!pin.equals(pedido.getPinSeguridad())) {
             throw new SecurityException("PIN de seguridad inválido");
         }
         pedido.setEstado(PedidoEstado.ENTREGADO);
+        pedido.setFechaEntregado(Instant.now());
         Pedido saved = pedidoRepository.save(pedido);
         trazabilidadService.enviarEventoCambioEstado(saved.getId().toString(), saved.getIdRestaurante(), saved.getIdCliente(), saved.getEstado().name(), "Pedido entregado");
         return toResponse(saved);
@@ -196,18 +200,27 @@ public class PedidoService {
         return String.valueOf(numero);
     }
 
-    private void enviarEventoNotificacionAsync(Pedido pedido, String emailCliente) {
+    private void enviarPinNotificationAsync(Pedido pedido) {
         CompletableFuture.runAsync(() -> {
-            Map<String, Object> payload = new HashMap<>();
-            payload.put("pedidoId", pedido.getId().toString());
-            payload.put("restauranteId", pedido.getIdRestaurante());
-            payload.put("clienteId", pedido.getIdCliente());
-            payload.put("estado", pedido.getEstado().name());
-            payload.put("pinSeguridad", pedido.getPinSeguridad());
-            if (emailCliente != null) {
-                payload.put("clienteEmail", emailCliente);
+            log.info("PIN generado para pedido {}: {}", pedido.getId(), pedido.getPinSeguridad());
+
+            NotificacionPinRequest request = new NotificacionPinRequest();
+            request.setPedidoId(pedido.getId().toString());
+            request.setPin(pedido.getPinSeguridad());
+            request.setTelefonoCliente("" );
+
+            // No hay teléfono de cliente disponible en el modelo actual.
+            // Por ahora sólo logueamos el PIN y dejamos preparada la llamada.
+            if (request.getTelefonoCliente() == null || request.getTelefonoCliente().isBlank()) {
+                log.info("No se envió SMS porque no hay teléfono de cliente disponible para pedido {}", pedido.getId());
+                return;
             }
-            msNotificacionesClient.enviarNotificacion(payload);
+
+            try {
+                msNotificacionesClient.enviarPinNotification(request);
+            } catch (Exception e) {
+                log.error("Error al notificar PIN: {}", e.getMessage());
+            }
         });
     }
 
@@ -222,6 +235,8 @@ public class PedidoService {
                 pedido.getEstado(),
                 pedido.getFechaCreacion(),
                 pedido.getFechaPreparacion(),
+                pedido.getFechaListo(),
+                pedido.getFechaEntregado(),
                 pedido.getEmpleadoId(),
                 pedido.getPinSeguridad(),
                 idsPlatos

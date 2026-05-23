@@ -31,7 +31,14 @@ public class SecurityConfig {
                 .authorizeRequests(auth -> auth
                         .antMatchers("/actuator/health", "/actuator/info").permitAll()
                         .antMatchers("/restaurantes", "/restaurantes/*/platos").permitAll()
-                        .antMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                        .antMatchers(
+                                "/api-docs/**",
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/swagger-resources/**",
+                                "/webjars/**"
+                        ).permitAll()
                         .antMatchers("/internal/**").permitAll()
                         .antMatchers(org.springframework.http.HttpMethod.POST, "/propietarios").hasRole("ADMIN")
                         .antMatchers(org.springframework.http.HttpMethod.POST, "/restaurantes").hasRole("ADMIN")

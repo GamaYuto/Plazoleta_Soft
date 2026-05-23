@@ -45,7 +45,11 @@ public class AuthService {
             UsuarioPrincipal principal = requester
                     .orElseThrow(() -> new SecurityException("Se requiere autenticación ADMIN para crear usuarios"));
             if (principal.getRole() != Role.ADMIN) {
-                throw new SecurityException("Solo ADMIN puede crear usuarios");
+                if (principal.getRole() == Role.PROPIETARIO && request.getRole() == Role.EMPLEADO) {
+                    // Permitir que un propietario cree empleados a través de ms-restaurante
+                } else {
+                    throw new SecurityException("Solo ADMIN puede crear usuarios");
+                }
             }
         }
 

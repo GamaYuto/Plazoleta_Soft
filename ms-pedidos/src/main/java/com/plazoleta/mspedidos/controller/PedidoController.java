@@ -64,7 +64,7 @@ public class PedidoController {
     @PreAuthorize("hasRole('EMPLEADO')")
     public ResponseEntity<PedidoResponse> entregarPedido(@PathVariable UUID id,
                                                          @Valid @RequestBody EntregarPedidoRequest request) {
-        return ResponseEntity.ok(pedidoService.entregarPedido(id, request));
+        return ResponseEntity.ok(pedidoService.entregarPedido(id, request.getPin()));
     }
 
     @GetMapping("/mis-pedidos")

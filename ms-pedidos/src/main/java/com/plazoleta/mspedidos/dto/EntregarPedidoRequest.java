@@ -6,5 +6,5 @@ import lombok.Data;
 @Data
 public class EntregarPedidoRequest {
     @NotBlank
-    private String pinSeguridad;
+    private String pin;
 }

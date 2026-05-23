@@ -36,3 +36,16 @@ mstrazabilidad:
   url: http://ms-trazabilidad:8080
 msnotificaciones:
   url: http://ms-notificaciones:8080
+ms:
+  notificaciones:
+    url: http://ms-notificaciones:8080
+
+springdoc:
+  api-docs:
+    path: /api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+  show-actuator: true
+  packages-to-scan: com.plazoleta

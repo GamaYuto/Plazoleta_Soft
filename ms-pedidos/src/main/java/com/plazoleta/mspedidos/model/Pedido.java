@@ -42,6 +42,10 @@ public class Pedido {
 
     private Instant fechaPreparacion;
 
+    private Instant fechaListo;
+
+    private Instant fechaEntregado;
+
     private Long empleadoId;
 
     private String pinSeguridad;

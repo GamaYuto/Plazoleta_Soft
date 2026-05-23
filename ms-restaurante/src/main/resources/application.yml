@@ -26,4 +26,10 @@ msauth:
     token: 
 springdoc:
   api-docs:
-    path: /v3/api-docs
+    path: /api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+  show-actuator: true
+  packages-to-scan: com.plazoleta

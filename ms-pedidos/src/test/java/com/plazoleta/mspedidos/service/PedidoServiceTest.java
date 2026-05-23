@@ -169,9 +169,9 @@ class PedidoServiceTest {
         when(pedidoRepository.save(any(Pedido.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         EntregarPedidoRequest request = new EntregarPedidoRequest();
-        request.setPinSeguridad("123456");
+        request.setPin("123456");
 
-        var response = pedidoService.entregarPedido(pedidoId, request);
+        var response = pedidoService.entregarPedido(pedidoId, request.getPin());
 
         assertEquals(PedidoEstado.ENTREGADO, response.getEstado());
     }
