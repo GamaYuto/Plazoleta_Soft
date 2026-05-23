@@ -1,20 +1,14 @@
-package com.plazoleta.msrestaurante.config;
+package com.plazoleta.msnotificaciones.config;
 
 import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 @Configuration
-public class ApplicationConfig {
-
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
+public class CorsConfig {
 
     @Bean
     public CorsFilter corsFilter() {

@@ -24,13 +24,13 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UsuarioResponse> register(@Valid @RequestBody RegisterRequest request,
+    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request,
                                                     Authentication authentication) {
         Optional<UsuarioPrincipal> requester = Optional.empty();
         if (authentication != null && authentication.isAuthenticated() && authentication.getPrincipal() instanceof UsuarioPrincipal) {
             requester = Optional.of((UsuarioPrincipal) authentication.getPrincipal());
         }
-        return ResponseEntity.ok(authService.register(request, requester));
+        return ResponseEntity.ok(authService.registerAndAuthenticate(request, requester));
     }
 
     @PostMapping("/login")

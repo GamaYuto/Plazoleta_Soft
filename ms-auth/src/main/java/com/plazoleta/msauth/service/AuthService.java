@@ -38,17 +38,21 @@ public class AuthService {
 
     public UsuarioResponse register(RegisterRequest request, Optional<UsuarioPrincipal> requester) {
         if (usuarioRepository.count() == 0) {
+            // Primer usuario debe ser ADMIN
             if (request.getRole() != Role.ADMIN) {
                 throw new IllegalArgumentException("El primer usuario debe ser ADMIN");
             }
+        } else if (request.getRole() == Role.CLIENTE) {
+            // Los CLIENTE pueden registrarse públicamente sin autenticación
         } else {
+            // Para otros roles (ADMIN, PROPIETARIO, EMPLEADO), requiere autenticación
             UsuarioPrincipal principal = requester
-                    .orElseThrow(() -> new SecurityException("Se requiere autenticación ADMIN para crear usuarios"));
+                    .orElseThrow(() -> new SecurityException("Se requiere autenticación para crear este usuario"));
             if (principal.getRole() != Role.ADMIN) {
                 if (principal.getRole() == Role.PROPIETARIO && request.getRole() == Role.EMPLEADO) {
                     // Permitir que un propietario cree empleados a través de ms-restaurante
                 } else {
-                    throw new SecurityException("Solo ADMIN puede crear usuarios");
+                    throw new SecurityException("No tienes permiso para crear este usuario");
                 }
             }
         }
@@ -64,6 +68,18 @@ public class AuthService {
         usuario.setRole(request.getRole());
         Usuario saved = usuarioRepository.save(usuario);
         return new UsuarioResponse(saved.getId(), saved.getNombre(), saved.getCorreo(), saved.getRole());
+    }
+
+    public AuthResponse registerAndAuthenticate(RegisterRequest request, Optional<UsuarioPrincipal> requester) {
+        // Primero registrar al usuario
+        register(request, requester);
+        // Luego autenticar y devolver token
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getCorreo(), request.getPassword())
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtUtils.generateJwtToken(authentication);
+        return new AuthResponse(jwt, request.getCorreo());
     }
 
     public AuthResponse authenticate(LoginRequest request) {
