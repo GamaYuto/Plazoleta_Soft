@@ -76,7 +76,13 @@ public class SecurityConfig {
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOriginPatterns(List.of("https://*.app.github.dev", "http://localhost:5173"));
+        config.setAllowedOriginPatterns(List.of(
+                "https://*.app.github.dev",
+                "http://localhost",
+                "http://localhost:5173",
+                "http://127.0.0.1",
+                "http://127.0.0.1:5173"
+        ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);

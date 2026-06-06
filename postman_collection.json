@@ -8,23 +8,23 @@
   "variable": [
     {
       "key": "msAuthUrl",
-      "value": "http://localhost:8083"
+      "value": "https://cautious-capybara-7gpgj7w4qr5frrrq-8083.app.github.dev"
     },
     {
       "key": "msRestauranteUrl",
-      "value": "http://localhost:8081"
+      "value": "https://cautious-capybara-7gpgj7w4qr5frrrq-8081.app.github.dev"
     },
     {
       "key": "msPedidosUrl",
-      "value": "http://localhost:8082"
+      "value": "https://cautious-capybara-7gpgj7w4qr5frrrq-8082.app.github.dev"
     },
     {
       "key": "msTrazabilidadUrl",
-      "value": "http://localhost:8084"
+      "value": "https://cautious-capybara-7gpgj7w4qr5frrrq-8084.app.github.dev"
     },
     {
       "key": "msNotificacionesUrl",
-      "value": "http://localhost:8085"
+      "value": "https://cautious-capybara-7gpgj7w4qr5frrrq-8085.app.github.dev"
     },
     {
       "key": "jwtToken",
@@ -73,7 +73,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"correo\": \"admin@example.com\",\n  \"password\": \"secret\"\n}"
+              "raw": "{\n  \"correo\": \"admin2@example.com\",\n  \"password\": \"Admin123!\"\n}"
             },
             "url": {
               "raw": "{{msAuthUrl}}/auth/login",
